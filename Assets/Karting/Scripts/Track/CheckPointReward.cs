@@ -17,7 +17,7 @@ public class CheckPointReward : MonoBehaviour
         
     }
 	
-	public void CheckPointAchived()
+	public void CheckPointAchived(int id)
 	{
 		if(!isAchived) {
 	    isAchived = true;
