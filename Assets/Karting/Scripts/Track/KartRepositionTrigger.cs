@@ -28,8 +28,12 @@ namespace KartGame.Track
         {
             if (Input.GetButtonDown ("Reset"))
             {
-                trackManager.ReplaceMovable (m_Movable);
-            }
+				AgentReset();
+			}
         }
+		
+		public void AgentReset(){
+			trackManager.ReplaceMovable (m_Movable);
+		}
     }
 }

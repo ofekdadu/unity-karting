@@ -20,6 +20,8 @@ namespace KartGame.Track
         public LayerMask kartLayers;
         [Tooltip("The layers to check for the ground.  Used to determine where the reset position for a kart is.")]
         public LayerMask groundLayers;
+		
+		public GameObject checkPoint0;
 
         Vector3 m_ResetPosition;
         Quaternion m_ResetRotation;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CheckPointReward : MonoBehaviour
 {
+	public bool isAchived = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,4 +16,15 @@ public class CheckPointReward : MonoBehaviour
     {
         
     }
+	
+	public void CheckPointAchived()
+	{
+		if(!isAchived) {
+	    isAchived = true;
+	    Debug.Log("Im here");
+		}
+	}
+	public void ResetIsAchived(){
+		isAchived = false;
+	}
 }
