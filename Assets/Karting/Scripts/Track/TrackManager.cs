@@ -1,16 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Security;
 using KartGame.KartSystems;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace KartGame.Track
 {
+
+    public class CheckPointEvent : UnityEvent<IRacer, Checkpoint>
+    {
+        
+    }
+
+
     /// <summary>
     /// A MonoBehaviour to deal with all the time and positions for the racers.
     /// </summary>
     public class TrackManager : MonoBehaviour
     {
+        public CheckPointEvent CheckPointEvent;
+
         [Tooltip ("The name of the track in this scene.  Used for track time records.  Must be unique.")]
         public string trackName;
         [Tooltip ("Number of laps for the race.")]
@@ -21,7 +32,7 @@ namespace KartGame.Track
         public KartRepositioner kartRepositioner;
 
         bool m_IsRaceRunning;
-        Dictionary<IRacer, Checkpoint> m_RacerNextCheckpoints = new Dictionary<IRacer, Checkpoint> (16);
+        public Dictionary<IRacer, Checkpoint> m_RacerNextCheckpoints = new Dictionary<IRacer, Checkpoint> ();
         TrackRecord m_SessionBestLap = TrackRecord.CreateDefault ();
         TrackRecord m_SessionBestRace = TrackRecord.CreateDefault ();
         TrackRecord m_HistoricalBestLap;
@@ -111,13 +122,24 @@ namespace KartGame.Track
             if(checkpoints.Count == 0)
                 return;
             
+            CheckPointEvent = new CheckPointEvent();
             Object[] allRacerArray = FindObjectsOfType<Object> ().Where (x => x is IRacer).ToArray ();
+            Object[] allAgentArray = FindObjectsOfType<Object>().Where(x => x is kartAgent).ToArray();
 
             for (int i = 0; i < allRacerArray.Length; i++)
             {
                 IRacer racer = allRacerArray[i] as IRacer;
                 m_RacerNextCheckpoints.Add (racer, checkpoints[0]);
                 racer.DisableControl ();
+            }
+
+            for (int i = 0; i < allAgentArray.Length; i++)
+            {
+                var agent = allAgentArray[i] as kartAgent;
+                if (agent != null)
+                {
+                    CheckPointEvent.AddListener(agent.achivedCheckPoint);
+                }
             }
         }
 
@@ -183,6 +205,8 @@ namespace KartGame.Track
 
         void RacerHitCorrectCheckpoint (IRacer racer, Checkpoint checkpoint)
         {
+            CheckPointEvent.Invoke(racer,checkpoint);
+
             if (checkpoint.isStartFinishLine)
             {
                 int racerCurrentLap = racer.GetCurrentLap ();
@@ -263,5 +287,12 @@ namespace KartGame.Track
                 movable.EnableControl ();
             kartRepositioner.OnRepositionComplete -= ReenableControl;
         }
+
+        public void RestrartRace(IRacer racer)
+        {
+            m_RacerNextCheckpoints[racer] = checkpoints[0];
+        }
+
+        
     }
 }
