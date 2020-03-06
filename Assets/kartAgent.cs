@@ -43,6 +43,7 @@ public class kartAgent : Agent, IInput
 
     void Start()
     {
+        kart.OnKartCollision.AddListener(HitWall2);
         first = true;
         //rBody = GetComponent<Rigidbody>();
         //trackManager = FindObjectOfType<TrackManager>();
@@ -111,7 +112,7 @@ public class kartAgent : Agent, IInput
         {
             m_Acceleration = 1f;
         }
-        //else if (vectorAction[0] < -0.9)//(vectorAction[0] < (-1 * Epsilon) )
+        //else if (vectorAction[0] < -0.5)//(vectorAction[0] < (-1 * Epsilon) )
         //    m_Acceleration = -1f;
         else
             m_Acceleration = 0f;
@@ -175,6 +176,7 @@ public class kartAgent : Agent, IInput
     
     public override void AgentReset()
     {
+        hitWallCounter = 0;
         if (!first)
         {
             base.AgentReset();
@@ -223,11 +225,25 @@ public class kartAgent : Agent, IInput
     public void HitWall()
     {
         hitWallCounter++;
-        if (hitWallCounter >= 5)
+        if (hitWallCounter >= 8)
         {
             Done();
             AgentReset();
         }
+
+        //kart.m_RaycastHitBuffer[i].transform.name;
+    }
+
+    public void HitWall2()
+    {
+        //hitWallCounter++;
+        //if (hitWallCounter >= 5)
+        //{
+        //    Done();
+        //    AgentReset();
+        //}
+
+        //kart.m_RaycastHitBuffer[i].transform.name;
     }
 
 
