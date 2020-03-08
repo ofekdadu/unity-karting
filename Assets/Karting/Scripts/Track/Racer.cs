@@ -19,7 +19,7 @@ namespace KartGame.Track
         float m_Timer = 0f;
         int m_CurrentLap = 0;
         List<float> m_LapTimes = new List<float> (9);
-        public bool[] isAchivedCheckPoints = new bool[30];
+        
 
         void Awake ()
         {
@@ -99,22 +99,6 @@ namespace KartGame.Track
             return name;
         }
 
-        public void achivedCheckPoint(int id)
-        {
-            if (!isAchivedCheckPoints[id])
-            {
-                //Reward player
-            }
-            isAchivedCheckPoints[id] = true;
-        }
 
-        public void resetAchivedCheckPoints()
-        {
-            if (isAchivedCheckPoints.All(c => c))
-            {
-                //GIMMEMONEY
-                isAchivedCheckPoints = new bool[30];
-            }
-        }
     }
 }

@@ -8,6 +8,7 @@ TagManager:
   - checkPoints
   - speedPads
   - startFinishLine
+  - player
   layers:
   - Default
   - TransparentFX
