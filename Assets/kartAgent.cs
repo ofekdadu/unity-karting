@@ -12,7 +12,6 @@ using UnityEngine.SocialPlatforms.Impl;
 public class kartAgent : Agent, IInput
 {
     Rigidbody rBody;
-    //private KartMovement m_movable;
     KartMovement kart;
     Vector3 startingPosition;
     Quaternion startingRotation;
@@ -38,22 +37,12 @@ public class kartAgent : Agent, IInput
     bool m_BoostPressed;
     bool m_FirePressed;
     bool m_FixedUpdateHappened;
-    //private TrackManager m_trackManager;
 
 
     void Start()
     {
         kart.OnKartCollision.AddListener(HitWall2);
         first = true;
-        //rBody = GetComponent<Rigidbody>();
-        //trackManager = FindObjectOfType<TrackManager>();
-        //racer = GetComponent<IRacer>();
-        //kart = GetComponent<KartMovement>();
-        //startingPosition = this.transform.position;
-        //startingRotation = this.transform.rotation;
-        //rBody = GetComponent<Rigidbody>();
-        //m_movable = GetComponent<KartMovement>();
-        //trackManager = trackManager.GetComponent<TrackManager>();
     }
 
     void Awake()
@@ -89,31 +78,16 @@ public class kartAgent : Agent, IInput
 
     public override void AgentAction(float[] vectorAction)
     {
-        //if (kart.Position.y < 0)
-        //{
-        //    Done();
-        //    AgentReset();
-        //}
         base.AgentAction(vectorAction);
         //vectorAction[0] = Acceleration
         //1 similar to up arrow
         //-1 similar to down arrow
         //0 similar to not pressing
 
-        //if (vectorAction[0] > 0)
-        //{
-        //    m_Acceleration = 1;
-        //}
-        //else
-        //{
-        //    m_Acceleration = 0;
-        //}
-        if (vectorAction[0] > 0.1)//Epsilon)
+        if (vectorAction[0] > 0.1)
         {
             m_Acceleration = 1f;
         }
-        //else if (vectorAction[0] < -0.5)//(vectorAction[0] < (-1 * Epsilon) )
-        //    m_Acceleration = -1f;
         else
             m_Acceleration = 0f;
 
@@ -121,55 +95,17 @@ public class kartAgent : Agent, IInput
         //1 similar to left arrow
         //-1 similar to right arrow
         //0 similar to not pressing
-        //if (Math.Abs(vectorAction[1] - 1f) < Epsilon)
-        //    m_Steering = -1f;
-        //else if (Math.Abs(vectorAction[1] + 1f) < Epsilon)
-        //    m_Steering = 1f;
-        //else
-        //    m_Steering = 0f;
         if (vectorAction.Length > 1)
         {
             m_Steering = vectorAction[1];
-            //if (vectorAction[1] > 0.1)//> Epsilon)
-            //{
-            //    m_Steering = 1f;
-            //    //AddReward(Epsilon);
-            //}
-            //else if (vectorAction[1] < -0.5)//< -1 * Epsilon)
-            //    m_Steering = -1f;
-            //else
-            //    m_Steering = 0f;
         }
         
-
         AddReward(kart.LocalSpeed * 0.001f);
 
-        //vectorAction[2] = Hop
-        // > 0.5 was already pressed
-        // > 0 similar to space 
-        // < similar to not pressing space 
         if (vectorAction.Length > 2)
         {
             m_HopPressed = vectorAction[2] > 0.75;
         }
-
-
-
-        //if (m_FixedUpdateHappened)
-        //{
-        //    m_FixedUpdateHappened = false;
-
-        //    m_HopPressed = false;
-        //    m_BoostPressed = false;
-        //    m_FirePressed = false;
-        //}
-
-        //if (vectorAction.Length > 2)
-        //{
-          //  m_HopPressed |= vectorAction[2] > 0;
-        //}
-        //m_BoostPressed |= Input.GetKeyDown(KeyCode.RightShift);
-        //m_FirePressed |= Input.GetKeyDown(KeyCode.RightControl);
 
     }
 
@@ -184,7 +120,6 @@ public class kartAgent : Agent, IInput
             kart.transform.rotation = startingRotation;
             kart.ForceMove(Vector3.zero, Quaternion.identity);
             trackManager.RestrartRace(racer);
-            //trackManager.ReplaceMovable(kart);
         }
         
         first = false;
@@ -222,27 +157,20 @@ public class kartAgent : Agent, IInput
         AddReward(1);
     }
 
+    
     public void HitWall()
     {
         hitWallCounter++;
-        if (hitWallCounter >= 8)
+        if (hitWallCounter >= 10)
         {
             Done();
             AgentReset();
         }
-
-        //kart.m_RaycastHitBuffer[i].transform.name;
     }
 
     public void HitWall2()
     {
-        //hitWallCounter++;
-        //if (hitWallCounter >= 5)
-        //{
-        //    Done();
-        //    AgentReset();
-        //}
-
+        //TODO this is an event raised from KartMovement if want to act differently based on type of collision use
         //kart.m_RaycastHitBuffer[i].transform.name;
     }
 
